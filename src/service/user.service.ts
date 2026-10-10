@@ -21,7 +21,8 @@ export class UserService {
 
         // Joga usuário para dentro do seu diretório.
         // O ideal seria criar esse serviço dentro de FileManager, mas por enquanto fica aqui mesmo.
-        this.fm.chdir(path.resolve(this.fm.get_curr_path(), userFound.user));
+        const result = await this.fm.chdir(path.resolve(this.fm.get_curr_path(), userFound.user));
+        console.log(result);
 
         return "SUCCESS";
     }

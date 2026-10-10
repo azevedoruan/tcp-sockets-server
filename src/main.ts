@@ -5,10 +5,18 @@ import { UserService } from "./service/user.service";
 import { ClientHandler } from "./client/clientHandler";
 import { FileManager } from "./app/filemanager.app";
 
+process.loadEnvFile();
+
 function main() {
 
+    const env = {
+        DB_PATH: process.env.DB_PATH!,
+        PORT: process.env.PORT ? Number(process.env.PORT) : 3000, 
+        HOST: process.env.HOST!
+    }
+
     // Database API
-    const db = new Database("/home/ruanazevedo/workspace/UTFPR/SD/tcp-sockets-server/database");
+    const db = new Database(env.DB_PATH);
 
     // Handle persistant datas
     const userRepo: UserRepository = new UserRepository(db);
@@ -25,7 +33,7 @@ function main() {
     // Handle sockets
     const serverTCP: ServerTCP = new ServerTCP(controller);
 
-    serverTCP.start(3000, '127.0.0.1');
+    serverTCP.start(env.PORT, env.HOST);
 }
 
 main();

@@ -29,7 +29,7 @@ export class ClientHandler {
                 case MessageType.EXIT:
                     return await this.exit();
                 default:
-                    return `Tipo de mensagem inválido. Tipo: ${type}`;
+                    throw new Error(`Tipo de mensagem inválido. Tipo: ${type}`);
             }
         } catch (error) {
             if (error instanceof Error) console.log(`ERROR: ${error.message}`);
