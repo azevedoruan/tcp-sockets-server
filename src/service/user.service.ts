@@ -42,6 +42,8 @@ export class UserService {
             throw new Error(`Usuário do nome ${user.user} já existe`);
         }
 
+        // TODO criar um diretorio para esse usuario em root/
+
         this.repo.registerNewUser(user);
     }
 }

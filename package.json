@@ -5,7 +5,7 @@
     "tsc": "^2.0.4"
   },
   "scripts": {
-    "server": "tsx src/server/server.ts",
+    "server": "tsx src/main.ts",
     "client": "tsx src/client/client.ts"
   },
   "devDependencies": {

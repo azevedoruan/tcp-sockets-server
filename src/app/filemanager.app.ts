@@ -91,4 +91,18 @@ export class FileManager {
     public concat_paths(source: string, new_path: string): string {
         return path.resolve(source, new_path);
     }
+
+    public async create_dir(name: string): Promise<string> {
+        const dir_path = path.resolve(this.root_path, name);
+
+        // Executa o comando no prompt
+        const { stderr } = await execAsync(`mkdir ${dir_path}`);
+        if (stderr) {
+            throw new Error(stderr);
+        }
+
+        // testarrrrV criaçao de usuario novo
+
+        return dir_path;
+    }
 }
