@@ -36,14 +36,14 @@ export class UserService {
     }
 
     public async registerNewUser(user: User): Promise<void> {
-
         const userValid = await this.repo.findByName(user.user);
         if (userValid) {
             throw new Error(`Usuário do nome ${user.user} já existe`);
         }
 
-        // TODO criar um diretorio para esse usuario em root/
-
         this.repo.registerNewUser(user);
+        const dirPath = await this.fm.create_dir(user.user);
+        
+        console.log(`New directory created for user '${user.user}'.`);
     }
 }

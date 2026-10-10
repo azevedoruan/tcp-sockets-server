@@ -1,5 +1,6 @@
-export type MessageType = "CONNECT" | "PWD" | "CHDIR" | "GETFILES" | "GETDIRS" | "EXIT";
+export type MessageType = "REGISTER" | "CONNECT" | "PWD" | "CHDIR" | "GETFILES" | "GETDIRS" | "EXIT";
 export const MessageType = {
+    REGISTER: "REGISTER" as MessageType,
     CONNECT: "CONNECT" as MessageType,
     PWD: "PWD" as MessageType,
     CHDIR: "CHDIR" as MessageType,

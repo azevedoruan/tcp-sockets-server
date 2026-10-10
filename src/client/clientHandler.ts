@@ -16,7 +16,7 @@ export class ClientHandler {
         const { type, args } = input;
 
         if (type == MessageType.CONNECT) return await this.connect(args);
-        // if (type == MessageType.REGISTER) return await this.register(args);
+         if (type == MessageType.REGISTER) return await this.register(args);
 
         const cmd: Command = {
             commandType: type,
@@ -34,5 +34,14 @@ export class ClientHandler {
 
         const result = await this.userService.login({ user: args[0], password: args[1] });
         return result;
+    }
+
+    private async register(args: string[]): Promise<string> {
+        if (!args[0] || !args[1]) {
+            throw new Error("Argumentos obrigatórios faltando.");
+        }
+
+        await this.userService.registerNewUser({ user: args[0], password: args[1] });
+        return "SUCCESS";
     }
 }
