@@ -1,4 +1,3 @@
-import path from "node:path";
 import { User } from "../api/database/schemas";
 import { FileManager } from "../app/filemanager.app";
 import { UserRepository } from "../repositories/user.repository";
@@ -20,9 +19,8 @@ export class UserService {
         }
 
         // Joga usuário para dentro do seu diretório.
-        // O ideal seria criar esse serviço dentro de FileManager, mas por enquanto fica aqui mesmo.
-        const result = await this.fm.chdir(path.resolve(this.fm.get_curr_path(), userFound.user));
-        console.log(result);
+        const userDir = this.fm.concat_paths(this.fm.get_curr_path(), userFound.user);
+        await this.fm.chdir(userDir);
 
         return "SUCCESS";
     }

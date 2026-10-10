@@ -87,4 +87,8 @@ export class FileManager {
         this.curr_path = newPath;
         return this.curr_path;
     }
+
+    public concat_paths(source: string, new_path: string): string {
+        return path.resolve(source, new_path);
+    }
 }
