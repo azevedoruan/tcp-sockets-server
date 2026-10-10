@@ -55,7 +55,7 @@ export class ServerTCP {
             .trim()
             .split(/[\s,]+/) // Regex para capturar qualquer combinação de espaços e vírgulas.
             .filter(Boolean); // Remove elementos vazios no caso de separadores nas pontas.
-        
+
         const messageType = (args.shift() ?? '') as MessageType;
 
         const input: Input = {

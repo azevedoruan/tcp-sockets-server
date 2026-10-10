@@ -1,9 +1,11 @@
+import { Command, FileManager } from "../app/filemanager.app";
 import { Input, MessageType } from "../server/server";
 import { UserService } from "../service/user.service";
 
 export class ClientHandler {
     public constructor(
-        private userService: UserService
+        private userService: UserService,
+        private fm: FileManager
     ) {
 
     }
@@ -12,61 +14,72 @@ export class ClientHandler {
         //TODO handkle the message types
         const { type, args } = input;
 
-        switch (type) {
-            case MessageType.CONNECT:
-                return await this.connect(args);
-            case MessageType.PWD:
-                return this.pwd();
-            case MessageType.CHDIR:
-                return this.chdir(args);
-            case MessageType.GETFILES:
-                return this.getfiles();
-            case MessageType.GETDIRS:
-                return this.getdirs();
-            case MessageType.EXIT:
-                return this.exit();
-            default:
-                return `Tipo de mensagem inválido. Tipo: ${type}`;
-        }
-    }
-
-    private async connect(args: string[]): Promise<string> {
-
         try {
-            if (!args[0] || !args[1]) {
-                throw Error("ERROR");
+            switch (type) {
+                case MessageType.CONNECT:
+                    return await this.connect(args);
+                case MessageType.PWD:
+                    return await this.pwd();
+                case MessageType.CHDIR:
+                    return await this.chdir(args);
+                case MessageType.GETFILES:
+                    return await this.getfiles();
+                case MessageType.GETDIRS:
+                    return await this.getdirs();
+                case MessageType.EXIT:
+                    return await this.exit();
+                default:
+                    return `Tipo de mensagem inválido. Tipo: ${type}`;
             }
-
-            // TODO verify is password in hash
-
-            const result = await this.userService.login({ user: args[0], password: args[1] });
-            return result;
-
-        } catch(e) {
-            if (e instanceof Error) {
-                return e.message;
-            }
-
+        } catch (error) {
+            if (error instanceof Error) console.log(`ERROR: ${error.message}`);
             return "ERROR";
         }
     }
 
-    private pwd(): string {
-        return "comando 'pwd' pressioando";
+    private async connect(args: string[]): Promise<string> {
+        if (!args[0] || !args[1]) {
+            throw new Error("Argumentos obrigatórios faltando.");
+        }
+
+        const result = await this.userService.login({ user: args[0], password: args[1] });
+        return result;
     }
 
-    private chdir(args: string[]): string {
-        return "comando 'chdir' pressioando";
+    private async pwd(): Promise<string> {
+        const cmd: Command = {
+            commandType: MessageType.PWD as string,
+            args: []
+        }
+
+        const result = await this.fm.write_cmd(cmd);
+        return result;
     }
 
-    private getfiles(): string {
-        return "comando 'getfiles' pressioando";
+    private async chdir(args: string[]): Promise<string> {
+        const cmd: Command = {
+            commandType: MessageType.CHDIR as string,
+            args
+        }
+
+        const result = await this.fm.write_cmd(cmd);
+        return result;
+    }
+
+    private async getfiles(): Promise<string> {
+        const cmd: Command = {
+            commandType: MessageType.GETFILES as string,
+            args: []
+        }
+
+        const result = await this.fm.write_cmd(cmd);
+        return result;
     }
 
     private getdirs(): string {
         return "comando 'getdirs' pressioando";
     }
-    
+
     private exit(): string {
         return "comando 'exit' pressioando";
     }
