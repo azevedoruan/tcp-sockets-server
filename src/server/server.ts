@@ -33,6 +33,12 @@ export class ServerTCP {
                 try {
                     const input = this.getInputMessages(data);
                     const output = await handler.handle(input);
+
+                    if (output === "EXIT") {
+                        socket.end(() => console.log("Conexão encerrada pelo usuário."));
+                        return;
+                    }
+
                     socket.write(output + "\r\n");
                 } catch(error) {
                     if (error instanceof Error) console.log(`ERROR: ${error.message}`);

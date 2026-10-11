@@ -30,6 +30,9 @@ export class ClientHandler {
                 return await this.fm.getfiles();
             case MessageType.GETDIRS:
                 return await this.fm.getdirs();
+            case MessageType.EXIT:
+                this.close();
+                return "EXIT";
             default:
                 throw new Error("Comando não reconhecido.");
         }

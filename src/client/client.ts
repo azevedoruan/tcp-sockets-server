@@ -23,7 +23,7 @@ class ClientTCP {
             this.clientSocket.on("close", () => console.log("Connection closed by server!"));
             this.clientSocket.on("error", (err) => console.error("Client socket error: ", err));
         });
-
+        
         if (this.clientSocket.closed) {
             this.clientSocket.destroy();
         }
