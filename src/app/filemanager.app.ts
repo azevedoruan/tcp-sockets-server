@@ -103,7 +103,7 @@ export class FileManager {
         const files = dirEntities.filter(d => d.isFile()).map(d => d.name);
         const fileCount = files.length;
 
-        return `${fileCount}\n${files}`;
+        return `${fileCount}\n${files.join('\n')}`;
     }
 
     public async getdirs(): Promise<string> {
@@ -114,7 +114,7 @@ export class FileManager {
         const dirs = dirEntities.filter(d => d.isDirectory()).map(d => d.name);
         const dirsCount = dirs.length;
 
-        return `${dirsCount}\n${dirs}`;
+        return `${dirsCount}\n${dirs.join('\n')}`;
     }
 
     public concat_paths(source: string, new_path: string): string {
