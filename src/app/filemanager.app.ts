@@ -42,11 +42,6 @@ export class FileManager {
 
     public async write_cmd(command: Command): Promise<string> {
 
-        // Verifica se usuário esta logado
-        if (this.curr_path.endsWith("root")) {
-            throw new Error('Nenhum usuário logado.');
-        }
-
         // Recebe o comando e seus argumentos por destruturação
         const { commandType, args } = command;
         const commandName = (commandType ?? '').toUpperCase();
@@ -90,6 +85,16 @@ export class FileManager {
         return this.curr_path;
     }
 
+    public async pwd(): Promise<string> {
+
+        if (this.validateLogedUser()) throw new Error('Nenhum usuário logado.');
+
+        const shellCommand = 'pwd';
+        const stdout = await this.executeCommand(shellCommand);
+
+        return stdout;
+    }
+
     public concat_paths(source: string, new_path: string): string {
         return path.resolve(source, new_path);
     }
@@ -108,5 +113,19 @@ export class FileManager {
 
     public close(): void {
         this.curr_path = this.root_path;
+    }
+
+    // Verifica se usuário esta logado
+    private validateLogedUser(): boolean {
+        return this.curr_path.endsWith("root");
+    }
+
+    // Executa o comando no prompt
+    private async executeCommand(shellCommand: string): Promise<string> {
+        const { stdout } = await execAsync(shellCommand, {
+            cwd: this.curr_path
+        });
+
+        return stdout;
     }
 }
