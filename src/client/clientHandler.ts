@@ -14,7 +14,23 @@ export class ClientHandler {
 
     public async handle(input: Input): Promise<string> {
 
-        const { type, args } = input;
+        const type = input.type as MessageType;
+        const args = input.args;
+
+        switch (type) {
+            case MessageType.CONNECT:
+                return await this.connect(args);
+            case MessageType.REGISTER:
+                return await this.register(args);
+            case MessageType.CHDIR:
+                return await this.chdir(args);
+            case MessageType.PWD:
+                return await this.fm.pwd();
+            case MessageType.GETFILES:
+                return await this.fm.getfiles();
+            default:
+                throw new Error("Comando não reconhecido.");
+        }
 
         if (type == MessageType.CONNECT) return await this.connect(args);
         if (type == MessageType.REGISTER) return await this.register(args);
@@ -48,5 +64,9 @@ export class ClientHandler {
 
         await this.userService.registerNewUser({ user: args[0], password: args[1] });
         return "SUCCESS";
+    }
+
+    private async chdir(args: string[]): Promise<string> {
+        return await this.fm.chdir(args[0]);
     }
 }

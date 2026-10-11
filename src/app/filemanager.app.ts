@@ -1,6 +1,6 @@
 
 import { exec } from 'node:child_process';
-import { stat } from 'node:fs/promises';
+import { readdir, stat } from 'node:fs/promises';
 import { promisify } from 'node:util';
 import { Command } from './command';
 
@@ -89,10 +89,21 @@ export class FileManager {
 
         if (this.validateLogedUser()) throw new Error('Nenhum usuário logado.');
 
-        const shellCommand = 'pwd';
+        const shellCommand = "pwd";
         const stdout = await this.executeCommand(shellCommand);
 
         return stdout;
+    }
+
+    public async getfiles(): Promise<string> {
+
+        if (this.validateLogedUser()) throw new Error('Nenhum usuário logado.');
+
+        const dirEntities = await readdir(this.curr_path, { withFileTypes: true });
+        const files = dirEntities.filter(d => d.isFile()).map(d => d.name);
+        const fileCount = files.length;
+
+        return `${fileCount}\n${files}`;
     }
 
     public concat_paths(source: string, new_path: string): string {
