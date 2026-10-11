@@ -106,6 +106,17 @@ export class FileManager {
         return `${fileCount}\n${files}`;
     }
 
+    public async getdirs(): Promise<string> {
+
+        if (this.validateLogedUser()) throw new Error('Nenhum usuário logado.');
+
+        const dirEntities = await readdir(this.curr_path, { withFileTypes: true });
+        const dirs = dirEntities.filter(d => d.isDirectory()).map(d => d.name);
+        const dirsCount = dirs.length;
+
+        return `${dirsCount}\n${dirs}`;
+    }
+
     public concat_paths(source: string, new_path: string): string {
         return path.resolve(source, new_path);
     }
