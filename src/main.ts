@@ -15,26 +15,15 @@ function main() {
         HOST: process.env.HOST!
     }
 
-    // Database API
-    const db = new Database(env.DB_PATH);
-
-    // Handle persistant datas
-    const userRepo: UserRepository = new UserRepository(db);
-
-    // Gerencia o diretório dos usuários
-    const file_manager: FileManager = new FileManager();
-
-    // Handle app logics
-    const userService: UserService = new UserService(userRepo, file_manager);
-
-    // Handle messages
-    const controller: ClientHandler = new ClientHandler(userService, file_manager);
-
-    // Handle sockets
-    const serverTCP: ServerTCP = new ServerTCP(controller);
+    const db = new Database(env.DB_PATH); // Database API
+    const userRepo: UserRepository = new UserRepository(db); // Handle persistant datas
+    const serverTCP = new ServerTCP(() => { // Handle sockets
+        const fileManager: FileManager = new FileManager(); // Gerencia o diretório dos usuários
+        const userService: UserService = new UserService(userRepo, fileManager); // Handle app logics
+        return new ClientHandler(userService, fileManager); // Handle messages
+    });
 
     serverTCP.start(env.PORT, env.HOST);
 }
-
 
 main();

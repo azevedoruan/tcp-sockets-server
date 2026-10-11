@@ -27,6 +27,10 @@ export class ClientHandler {
         return result;
     }
 
+    public close(): void {
+        this.fm.close();
+    }
+
     private async connect(args: string[]): Promise<string> {
         if (!args[0] || !args[1]) {
             throw new Error("Argumentos obrigatórios faltando.");

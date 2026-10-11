@@ -105,4 +105,8 @@ export class FileManager {
 
         return dir_path;
     }
+
+    public close(): void {
+        this.curr_path = this.root_path;
+    }
 }
