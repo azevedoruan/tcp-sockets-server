@@ -2,17 +2,13 @@
 import { exec } from 'node:child_process';
 import { stat } from 'node:fs/promises';
 import { promisify } from 'node:util';
+import { Command } from './command';
 
 // Ideal usar 'path' para lidar com caminhos em diferentes SOs.
 // No caso de '\' para windows e '/' para linux por exemplo.
 import path from 'node:path';
 
 const execAsync = promisify(exec);
-
-export type Command = {
-    commandType: string,
-    args: string[]
-}
 
 /*
     Mapeamento seguro: nome lógico do comando -> comando de shell fixo.
@@ -45,6 +41,12 @@ export class FileManager {
     }
 
     public async write_cmd(command: Command): Promise<string> {
+
+        // Verifica se usuário esta logado
+        if (this.curr_path.endsWith("root")) {
+            throw new Error('Nenhum usuário logado.');
+        }
+
         // Recebe o comando e seus argumentos por destruturação
         const { commandType, args } = command;
         const commandName = (commandType ?? '').toUpperCase();
@@ -100,8 +102,6 @@ export class FileManager {
         if (stderr) {
             throw new Error(stderr);
         }
-
-        // testarrrrV criaçao de usuario novo
 
         return dir_path;
     }

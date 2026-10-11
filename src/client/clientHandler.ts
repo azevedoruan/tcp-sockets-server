@@ -1,4 +1,5 @@
-import { Command, FileManager } from "../app/filemanager.app";
+import { FileManager } from "../app/filemanager.app";
+import { Command } from "../app/command";
 import { Input } from "../schemas/input";
 import { UserService } from "../service/user.service";
 import { MessageType } from "../schemas/messagetype";
@@ -16,7 +17,7 @@ export class ClientHandler {
         const { type, args } = input;
 
         if (type == MessageType.CONNECT) return await this.connect(args);
-         if (type == MessageType.REGISTER) return await this.register(args);
+        if (type == MessageType.REGISTER) return await this.register(args);
 
         const cmd: Command = {
             commandType: type,
